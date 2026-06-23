@@ -24,6 +24,11 @@ This project has two parts:
 1. **Training** (`neat_pong.py`) — runs the NEAT algorithm. A population of neural networks plays Pong against each other, generation after generation. Networks that hit the ball more often and score points get higher fitness and are more likely to pass their traits to the next generation. After training, the best network is saved to `best.pickle`.
 2. **Playing** (`main.py`) — loads `best.pickle` and lets a human play against the trained AI, or against another human locally.
 
+## Images
+
+![](misc/images/img1.jpeg)
+![](misc/images/img2.jpeg)
+ 
 ## Project Structure
 
 ```
