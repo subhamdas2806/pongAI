@@ -2,23 +2,62 @@ import pygame
 import neat
 import pickle
 import os
+import time
 
 from pong.game import Game
+from pong import crt_fx
 
 WIDTH, HEIGHT = 700, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Pong")
-
-FONT = pygame.font.SysFont("comicsans", 40)
+pygame.display.set_caption("PONG // SUBJECT TERMINAL")
 
 
 def show_menu():
+    clock = pygame.time.Clock()
+    blink_timer = 0
+    blink_on = True
+
     while True:
-        WIN.fill((0, 0, 0))
-        title = FONT.render("Press 1: Human vs Human", 1, (255, 255, 255))
-        sub = FONT.render("Press 2: Human vs AI", 1, (255, 255, 255))
-        WIN.blit(title, (WIDTH // 2 - title.get_width() // 2, 180))
-        WIN.blit(sub, (WIDTH // 2 - sub.get_width() // 2, 240))
+        clock.tick(30)
+        blink_timer += 1
+        if blink_timer >= 15:
+            blink_timer = 0
+            blink_on = not blink_on
+
+        WIN.fill(crt_fx.BG)
+
+        crt_fx.draw_bracket_frame(WIN, (16, 16, WIDTH - 32, HEIGHT - 32),
+                                   color=crt_fx.PHOSPHOR_DIM, thickness=2, corner_len=26)
+
+        crt_fx.draw_glow_text(WIN, "SUBJECT TERMINAL // PONG-7", 16, (40, 36),
+                               color=crt_fx.PHOSPHOR_DIM)
+        crt_fx.draw_dotted_line(WIN, (40, 60), (WIDTH - 40, 60),
+                                 color=crt_fx.PHOSPHOR_DIM, dash=4, gap=3, width=1)
+
+        crt_fx.draw_glow_text(WIN, "PONG", 64, (WIDTH // 2, 150),
+                               color=crt_fx.PHOSPHOR_BRIGHT, center=True, bold=True)
+        crt_fx.draw_glow_text(WIN, "NEUROEVOLUTION PROTOCOL ACTIVE", 14,
+                               (WIDTH // 2, 195), color=crt_fx.ACCENT, center=True)
+
+        crt_fx.draw_dotted_line(WIN, (60, 240), (WIDTH - 60, 240),
+                                 color=crt_fx.PHOSPHOR_DIM, dash=4, gap=3, width=1)
+
+        crt_fx.draw_glow_text(WIN, "[ 1 ]  HUMAN  VS  HUMAN", 24,
+                               (WIDTH // 2, 290), color=crt_fx.PHOSPHOR_BRIGHT, center=True)
+        crt_fx.draw_glow_text(WIN, "[ 2 ]  HUMAN  VS  AI", 24,
+                               (WIDTH // 2, 335), color=crt_fx.PHOSPHOR_BRIGHT, center=True)
+
+        if blink_on:
+            crt_fx.draw_glow_text(WIN, "AWAITING INPUT_", 14, (WIDTH // 2, 400),
+                                   color=crt_fx.PHOSPHOR_DIM, center=True)
+
+        status = "AI MODEL: READY" if os.path.exists("best.pickle") else "AI MODEL: NOT TRAINED"
+        status_color = crt_fx.ACCENT if os.path.exists("best.pickle") else crt_fx.RED
+        crt_fx.draw_glow_text(WIN, status, 12, (40, HEIGHT - 36), color=status_color)
+        crt_fx.draw_glow_text(WIN, time.strftime("%H:%M:%S"), 12,
+                               (WIDTH - 100, HEIGHT - 36), color=crt_fx.PHOSPHOR_DIM)
+
+        crt_fx.apply_crt_overlay(WIN, noise_strength=8)
         pygame.display.update()
 
         for event in pygame.event.get():

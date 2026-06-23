@@ -1,4 +1,5 @@
 import pygame
+from . import crt_fx
 
 
 class Paddle:
@@ -11,8 +12,12 @@ class Paddle:
         self.y = self.original_y = y
 
     def draw(self, win):
-        pygame.draw.rect(
-            win, (255, 255, 255), (self.x, self.y, self.WIDTH, self.HEIGHT))
+        rect = (self.x, self.y, self.WIDTH, self.HEIGHT)
+        glow = pygame.Surface((self.WIDTH + 12, self.HEIGHT + 12), pygame.SRCALPHA)
+        pygame.draw.rect(glow, (*crt_fx.GLOW, 70), glow.get_rect(), border_radius=4)
+        win.blit(glow, (self.x - 6, self.y - 6))
+        pygame.draw.rect(win, crt_fx.PHOSPHOR_BRIGHT, rect, border_radius=2)
+        pygame.draw.rect(win, crt_fx.PHOSPHOR_DIM, rect, width=1, border_radius=2)
 
     def move(self, up=True):
         if up:

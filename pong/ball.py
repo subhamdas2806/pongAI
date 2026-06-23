@@ -1,6 +1,7 @@
 import pygame
 import math
 import random
+from . import crt_fx
 
 
 class Ball:
@@ -25,7 +26,11 @@ class Ball:
         return angle
 
     def draw(self, win):
-        pygame.draw.circle(win, (255, 255, 255), (self.x, self.y), self.RADIUS)
+        glow = pygame.Surface((self.RADIUS * 4, self.RADIUS * 4), pygame.SRCALPHA)
+        center = (self.RADIUS * 2, self.RADIUS * 2)
+        pygame.draw.circle(glow, (*crt_fx.GLOW, 45), center, int(self.RADIUS * 1.8))
+        win.blit(glow, (self.x - self.RADIUS * 2, self.y - self.RADIUS * 2))
+        pygame.draw.circle(win, crt_fx.PHOSPHOR_BRIGHT, (self.x, self.y), self.RADIUS)
 
     def move(self):
         self.x += self.x_vel

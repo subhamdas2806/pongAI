@@ -1,5 +1,6 @@
 from .paddle import Paddle
 from .ball import Ball
+from . import crt_fx
 import pygame
 import random
 pygame.init()
@@ -15,9 +16,8 @@ class GameInformation:
 
 class Game:
 
-    SCORE_FONT = pygame.font.SysFont("comicsans", 50)
     WHITE = (255, 255, 255)
-    BLACK = (0, 0, 0)
+    BLACK = crt_fx.BG
     RED = (255, 0, 0)
 
     def __init__(self, window, window_width, window_height):
@@ -37,27 +37,32 @@ class Game:
         self.window = window
 
     def _draw_score(self):
-        left_score_text = self.SCORE_FONT.render(
-            f"{self.left_score}", 1, self.WHITE)
-        right_score_text = self.SCORE_FONT.render(
-            f"{self.right_score}", 1, self.WHITE)
-        self.window.blit(left_score_text, (self.window_width //
-                                           4 - left_score_text.get_width()//2, 20))
-        self.window.blit(right_score_text, (self.window_width * (3/4) -
-                                            right_score_text.get_width()//2, 20))
+        crt_fx.draw_glow_text(
+            self.window, f"{self.left_score:02d}", 46,
+            (self.window_width // 4, 38), color=crt_fx.PHOSPHOR_BRIGHT,
+            center=True, bold=True)
+        crt_fx.draw_glow_text(
+            self.window, f"{self.right_score:02d}", 46,
+            (int(self.window_width * 0.75), 38), color=crt_fx.PHOSPHOR_BRIGHT,
+            center=True, bold=True)
+        crt_fx.draw_glow_text(
+            self.window, "P1", 14, (self.window_width // 4, 64),
+            color=crt_fx.PHOSPHOR_DIM, center=True)
+        crt_fx.draw_glow_text(
+            self.window, "P2", 14, (int(self.window_width * 0.75), 64),
+            color=crt_fx.PHOSPHOR_DIM, center=True)
 
     def _draw_hits(self):
-        hits_text = self.SCORE_FONT.render(
-            f"{self.left_hits + self.right_hits}", 1, self.RED)
-        self.window.blit(hits_text, (self.window_width //
-                                     2 - hits_text.get_width()//2, 10))
+        crt_fx.draw_glow_text(
+            self.window, f"RALLY {self.left_hits + self.right_hits:03d}", 18,
+            (self.window_width // 2, 16), color=crt_fx.ACCENT, center=True)
 
     def _draw_divider(self):
-        for i in range(10, self.window_height, self.window_height//20):
-            if i % 2 == 1:
-                continue
-            pygame.draw.rect(
-                self.window, self.WHITE, (self.window_width//2 - 5, i, 10, self.window_height//20))
+        crt_fx.draw_dotted_line(
+            self.window,
+            (self.window_width // 2, 0),
+            (self.window_width // 2, self.window_height),
+            color=crt_fx.PHOSPHOR_DIM, dash=6, gap=6, width=2)
 
     def _handle_collision(self):
         ball = self.ball
@@ -108,6 +113,12 @@ class Game:
             paddle.draw(self.window)
 
         self.ball.draw(self.window)
+
+        crt_fx.draw_bracket_frame(
+            self.window, (4, 4, self.window_width - 8, self.window_height - 8),
+            color=crt_fx.PHOSPHOR_DIM, thickness=2, corner_len=22)
+
+        crt_fx.apply_crt_overlay(self.window, noise_strength=6)
 
     def move_paddle(self, left=True, up=True):
         """
