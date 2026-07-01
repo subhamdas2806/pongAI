@@ -1,15 +1,8 @@
-"""
-Shared retro-terminal / CRT visual effects for the Pong UI.
-Cold blue-violet phosphor look, heavy scanlines, glow, and noise.
-Import and call apply_crt_overlay(surface) at the end of any draw() call.
-"""
-
 import pygame
 import random
 
-# --- Palette ---
 BG = (5, 5, 12)
-PHOSPHOR = (160, 170, 255)       # main text / line color
+PHOSPHOR = (160, 170, 255)
 PHOSPHOR_BRIGHT = (210, 215, 255)
 PHOSPHOR_DIM = (70, 75, 130)
 GLOW = (90, 100, 220)
@@ -39,7 +32,6 @@ def get_font(size, bold=False):
 
 
 def draw_glow_text(surface, text, size, pos, color=PHOSPHOR_BRIGHT, center=False, bold=False, glow_strength=3):
-    """Draws text with a soft multi-pass glow behind it, terminal style."""
     font = get_font(size, bold=bold)
     glow_color = tuple(min(255, c) for c in GLOW)
 
@@ -64,7 +56,6 @@ def draw_glow_text(surface, text, size, pos, color=PHOSPHOR_BRIGHT, center=False
 
 
 def draw_bracket_frame(surface, rect, color=PHOSPHOR, thickness=2, corner_len=18):
-    """Draws corner-bracket frame like a HUD readout box, not a full rectangle."""
     x, y, w, h = rect
     pts = [
         ((x, y + corner_len), (x, y), (x + corner_len, y)),
@@ -133,7 +124,7 @@ def _get_vignette(width, height):
 
 
 def apply_crt_overlay(surface, noise_strength=6):
-    """Call this LAST, after all other drawing, to lay scanlines/vignette/noise on top."""
+
     width, height = surface.get_size()
 
     surface.blit(_get_scanline_overlay(width, height), (0, 0))

@@ -121,13 +121,6 @@ class Game:
         crt_fx.apply_crt_overlay(self.window, noise_strength=6)
 
     def move_paddle(self, left=True, up=True):
-        """
-        Move the left or right paddle.
-
-        :returns: boolean indicating if paddle movement is valid. 
-                  Movement is invalid if it causes paddle to go 
-                  off the screen
-        """
         if left:
             if up and self.left_paddle.y - Paddle.VEL < 0:
                 return False
@@ -144,12 +137,6 @@ class Game:
         return True
 
     def loop(self):
-        """
-        Executes a single game loop.
-
-        :returns: GameInformation instance stating score 
-                  and hits of each paddle.
-        """
         self.ball.move()
         self._handle_collision()
 
@@ -166,7 +153,6 @@ class Game:
         return game_info
 
     def reset(self):
-        """Resets the entire game."""
         self.ball.reset()
         self.left_paddle.reset()
         self.right_paddle.reset()
