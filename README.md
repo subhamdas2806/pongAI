@@ -7,6 +7,7 @@ Two neural networks are evolved against each other over many generations until t
 ## Table of Contents
 
 - [Overview](#overview)
+- [Images](#images)
 - [Project Structure](#project-structure)
 - [Requirements](#requirements)
 - [Setup](#setup)
